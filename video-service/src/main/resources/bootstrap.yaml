@@ -1,0 +1,38 @@
+server:
+  port: 7805
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  mvc:
+    pathmatch:
+      #  如果开发者使用的是Knife4j 2.x版本，并且Spring Boot版本高于2.4,那么需要在Spring Boot的yml文件中做如下配置：
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: gsl-video-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: gsl
+      config:
+        group: VP_SIT
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        # 公共配置
+        shared-configs:
+          - data-id: gsl-common
+            group: ${spring.cloud.nacos.config.group}
+            file-extension: ${spring.cloud.nacos.config.file-extension}
+  messages:
+    basename: META-INF/locale/messages,META-INF/video/locale/returncodes,META-INF/video/locale/exceptioncodes
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isDelete
+      logic-delete-value: 1 #逻辑已删除 0：未删除
+  # xml文件位置
+  mapper-locations: classpath:/mapper/*.xml
+  # 配置日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

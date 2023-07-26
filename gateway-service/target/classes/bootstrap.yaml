@@ -1,0 +1,42 @@
+server:
+  port: 7802
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  application:
+    name: wr-gateway-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.30.53:7800
+        group: gsl-gateway # 本地启动时改一个自己的喜欢的名称
+      config:
+        server-addr: 192.168.30.53:7800
+        file-extension: yaml
+    gateway:
+      routes:
+        - id: wr-user-service
+          uri: lb://wr-user-service
+          predicates:
+            - Path=/vpApi/wr-user-service/**
+          filters:
+            - StripPrefix=1
+        - id: wr-user-action-service
+          uri: lb://wr-user-action-service
+          predicates:
+            - Path=/vpApi/wr-user-action-service/**
+          filters:
+            - StripPrefix=1
+        - id: wr-video-service
+          uri: lb://wr-video-service
+          predicates:
+            - Path=/vpApi/wr-video-service/**
+          filters:
+            - StripPrefix=1
+filter:
+  allowedUrl:
+    - /vpApi/wr-user-service/login
+    - /vpApi/wr-user-service/logout

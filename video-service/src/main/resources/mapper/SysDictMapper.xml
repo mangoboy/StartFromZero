@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	数据库字段多语言说明： 
+	如果需要实现数据库字段多语言，需要在对应的数据库中文字段后面加上括号内内容（_I18N）,比如:
+	原始SQL为：SELECT CHANNEL_NAME FROM DIM_CHANNEL 
+	数据库多语言，需改写为： SELECT CHANNEL_NAME_I18N FROM DIM_CHANNEL 
+	前置条件：数据库表每种语言对应一个字段，中文字段名为CHANNEL_NAME，英文字段名CHANNEL_NAME_EN，按照I18N协议其他语言加上对应语言的缩写 
+-->
+<mapper namespace="com.gsl.video.core.sysDict.mapper.SysDictMapper">
+
+	<resultMap id="SysDictMap" type="com.gsl.video.core.sysDict.entity.SysDictEntity">
+		<result column="label" property="label" />
+		<result column="value" property="value" />
+		<result column="type" property="type" />
+		<result column="status" property="status" />
+		<result column="sort" property="sort" />
+	</resultMap>
+
+	<select id="getList" resultMap="SysDictMap">
+		select 
+			a.label, a.value, a.type, a.status, a.sort
+		from t_sys_dict a 
+		where 1 = 1
+			<if test="label != null and label != '' ">
+				and a.label = #{label}
+			</if>
+			<if test="value != null and value != '' ">
+				and a.value = #{value}
+			</if>
+			<if test="type != null and type != '' ">
+				and a.type = #{type}
+			</if>
+			<if test="status != null and status != '' ">
+				and a.status = #{status}
+			</if>
+			<if test="sort != null and sort != '' ">
+				and a.sort = #{sort}
+			</if>
+			<if test="orderby != null and orderby != '' ">
+				order by '${orderby}'
+			</if>
+			<if test="start >= 0">
+				limit #{start, jdbcType=DECIMAL}, #{length, jdbcType=DECIMAL}
+			</if>
+		
+	</select>
+</mapper>
