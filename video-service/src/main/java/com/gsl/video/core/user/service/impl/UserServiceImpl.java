@@ -56,6 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     @Override
     public boolean update(UserReqDTO dto) {
         UserEntity entity = UserConvert.INSTANCE.reqDTO2Entity(dto);
+        System.out.println("123");
         return updateById(entity);
     }
 
